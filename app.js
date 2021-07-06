@@ -12,4 +12,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://localhost:27017/bitfilmsdb', mongoosePreset);
 
+app.use('/', require('./routes/index'));
+
 app.listen(PORT);
