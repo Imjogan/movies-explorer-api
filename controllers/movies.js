@@ -4,15 +4,15 @@ const BadRequestError = require('../errors/bad-request-err');
 const ForbiddenError = require('../errors/forbidden-err');
 
 const {
-  incorrectCardDataError,
-  cardNotFoundError,
+  incorrectMovieDataError,
+  movieNotFoundError,
   insufficientRights,
 } = require('../utils/errors');
 
 module.exports.getMovies = (req, res, next) => {
   (async () => {
     try {
-      const movies = await Movie.find({});
+      const movies = await Movie.find({}).populate('owner');
       res.status(200).send(movies);
     } catch (err) {
       next(err);
@@ -53,7 +53,7 @@ module.exports.createMovie = (req, res, next) => {
       res.status(201).send(movie);
     } catch (err) {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError(incorrectCardDataError));
+        next(new BadRequestError(incorrectMovieDataError));
       }
       next(err);
     }
@@ -73,9 +73,9 @@ module.exports.deleteMovie = (req, res, next) => {
       res.status(200).send(userMovie);
     } catch (err) {
       if (err.message === 'NotFound') {
-        next(new NotFoundError(cardNotFoundError));
+        next(new NotFoundError(movieNotFoundError));
       } else if (err.name === 'CastError') {
-        next(new BadRequestError(incorrectCardDataError));
+        next(new BadRequestError(incorrectMovieDataError));
       }
       next(err);
     }

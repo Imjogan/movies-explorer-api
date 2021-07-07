@@ -62,6 +62,28 @@ const movieSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    nameRU: {
+      type: String,
+      required: true,
+      validate: {
+        validator(string) {
+          // eslint-disable-next-line no-useless-escape
+          return validator.isAlphanumeric(string, ['ru-RU'], { ignore: '/[\s-]/' });
+        },
+        message: 'Вы должны указать название на русском языке',
+      },
+    },
+    nameEN: {
+      type: String,
+      required: true,
+      validate: {
+        validator(string) {
+          // eslint-disable-next-line no-useless-escape
+          return validator.isAlphanumeric(string, ['en-IN'], { ignore: '/[s-]/' });
+        },
+        message: 'Вы должны указать название на английском языке',
+      },
+    },
   },
   { versionKey: false },
 );
