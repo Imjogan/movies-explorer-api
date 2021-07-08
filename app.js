@@ -2,40 +2,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const { errors, celebrate, Joi } = require('celebrate');
-const { mongoosePreset } = require('./utils/constants');
+const { options } = require('./utils/corsOptions');
+const { limiter } = require('./utils/limiter');
+const { mongoosePreset } = require('./utils/config');
 const { requestedResourceNotFoundError } = require('./utils/errors');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const unexpectedError = require('./middlewares/unexpectedError');
 const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-
-// ограничиваем количество запросов к API в час
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-});
-
-// настройки CORS
-const options = {
-  origin: [
-    'http://localhost:3000',
-    'http://130.193.52.168',
-    'https://130.193.52.168',
-    'http://movies-explorer.mjogan.nomoredomains.club',
-    'https://movies-explorer.mjogan.nomoredomains.club',
-    'http://b.movies-explorer.mjogan.nomoredomains.club',
-    'https://b.movies-explorer.mjogan.nomoredomains.club',
-  ],
-  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  allowedHeaders: ['Content-Type', 'origin', 'Authorization'],
-  credentials: true,
-};
 
 // порт из файла окружения
 const { PORT = 3000 } = process.env;
