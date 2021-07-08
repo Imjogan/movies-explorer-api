@@ -23,12 +23,12 @@ const limiter = rateLimit({
 const options = {
   origin: [
     'http://localhost:3000',
-    // 'http://84.252.137.18',
-    // 'https://84.252.137.18',
-    // 'http://mesto.mjogan.nomoredomains.club',
-    // 'https://mesto.mjogan.nomoredomains.club',
-    // 'http://api.mesto.mjogan.nomoredomains.club',
-    // 'https://api.mesto.mjogan.nomoredomains.club',
+    'http://130.193.52.168',
+    'https://130.193.52.168',
+    'http://movies-explorer.mjogan.nomoredomains.club',
+    'https://movies-explorer.mjogan.nomoredomains.club',
+    'http://b.movies-explorer.mjogan.nomoredomains.club',
+    'https://b.movies-explorer.mjogan.nomoredomains.club',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
