@@ -12,7 +12,7 @@ const {
 module.exports.getMovies = (req, res, next) => {
   (async () => {
     try {
-      const movies = await Movie.find({}).populate('owner');
+      const movies = await Movie.find({});
       res.status(200).send(movies);
     } catch (err) {
       next(err);
@@ -54,8 +54,9 @@ module.exports.createMovie = (req, res, next) => {
     } catch (err) {
       if (err.name === 'ValidationError') {
         next(new BadRequestError(incorrectMovieDataError));
+      } else {
+        next(err);
       }
-      next(err);
     }
   })();
 };
@@ -64,7 +65,7 @@ module.exports.deleteMovie = (req, res, next) => {
   (async () => {
     try {
       const movie = await Movie.findById(req.params.movieId).orFail(
-        new Error('NotFound'),
+        new NotFoundError(movieNotFoundError),
       );
       if (!movie.owner.equals(req.user._id)) {
         throw new ForbiddenError(insufficientRights);
@@ -72,12 +73,11 @@ module.exports.deleteMovie = (req, res, next) => {
       const userMovie = await Movie.findByIdAndRemove(req.params.movieId);
       res.status(200).send(userMovie);
     } catch (err) {
-      if (err.message === 'NotFound') {
-        next(new NotFoundError(movieNotFoundError));
-      } else if (err.name === 'CastError') {
+      if (err.name === 'CastError') {
         next(new BadRequestError(incorrectMovieDataError));
+      } else {
+        next(err);
       }
-      next(err);
     }
   })();
 };

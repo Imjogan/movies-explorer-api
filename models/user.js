@@ -1,11 +1,13 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const { minLength, maxLength } = require('../utils/constants');
+const { wrongMailFormat } = require('../utils/errors');
 
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
+      required: true,
       minlength: minLength,
       maxlength: maxLength,
     },
@@ -17,7 +19,7 @@ const userSchema = new mongoose.Schema(
         validator(string) {
           return validator.isEmail(string);
         },
-        message: 'Неправильный формат почты',
+        message: wrongMailFormat,
       },
     },
     password: {

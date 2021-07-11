@@ -6,6 +6,7 @@ const {
   createMovie,
   deleteMovie,
 } = require('../controllers/movies');
+const { wrongLink } = require('../utils/errors');
 
 router.get('/', getMovies);
 router.post(
@@ -16,15 +17,15 @@ router.post(
       director: Joi.string().required(),
       duration: Joi.number().required(),
       year: Joi.string().required(),
-      description: Joi.string(),
-      movieId: Joi.string(),
-      nameRU: Joi.string(),
-      nameEN: Joi.string(),
+      description: Joi.string().required(),
+      movieId: Joi.number().required(),
+      nameRU: Joi.string().required(),
+      nameEN: Joi.string().required(),
       image: Joi.string()
         .required()
         .custom((value, helper) => {
           if (!validator.isURL(value, { require_protocol: true })) {
-            return helper.message('Вы должны указать ссылку');
+            return helper.message(wrongLink);
           }
           return value;
         }),
@@ -32,7 +33,7 @@ router.post(
         .required()
         .custom((value, helper) => {
           if (!validator.isURL(value, { require_protocol: true })) {
-            return helper.message('Вы должны указать ссылку');
+            return helper.message(wrongLink);
           }
           return value;
         }),
@@ -40,7 +41,7 @@ router.post(
         .required()
         .custom((value, helper) => {
           if (!validator.isURL(value, { require_protocol: true })) {
-            return helper.message('Вы должны указать ссылку');
+            return helper.message(wrongLink);
           }
           return value;
         }),

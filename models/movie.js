@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const { wrongLink, wrongNameInEnglish, wrongNameInRussian } = require('../utils/errors');
 
 const movieSchema = new mongoose.Schema(
   {
@@ -29,7 +30,7 @@ const movieSchema = new mongoose.Schema(
         validator(string) {
           return validator.isURL(string);
         },
-        message: 'Вы должны указать ссылку',
+        message: wrongLink,
       },
       required: true,
     },
@@ -39,7 +40,7 @@ const movieSchema = new mongoose.Schema(
         validator(string) {
           return validator.isURL(string);
         },
-        message: 'Вы должны указать ссылку',
+        message: wrongLink,
       },
       required: true,
     },
@@ -49,7 +50,7 @@ const movieSchema = new mongoose.Schema(
         validator(string) {
           return validator.isURL(string);
         },
-        message: 'Вы должны указать ссылку',
+        message: wrongLink,
       },
       required: true,
     },
@@ -59,7 +60,7 @@ const movieSchema = new mongoose.Schema(
       required: true,
     },
     movieId: {
-      type: String,
+      type: Number,
       required: true,
     },
     nameRU: {
@@ -67,10 +68,9 @@ const movieSchema = new mongoose.Schema(
       required: true,
       validate: {
         validator(string) {
-          // eslint-disable-next-line no-useless-escape
-          return validator.isAlphanumeric(string, ['ru-RU'], { ignore: '/[\s-]/' });
+          return validator.isAlphanumeric(string, ['ru-RU'], { ignore: '/[ -]/' });
         },
-        message: 'Вы должны указать название на русском языке',
+        message: wrongNameInRussian,
       },
     },
     nameEN: {
@@ -78,10 +78,9 @@ const movieSchema = new mongoose.Schema(
       required: true,
       validate: {
         validator(string) {
-          // eslint-disable-next-line no-useless-escape
-          return validator.isAlphanumeric(string, ['en-IN'], { ignore: '/[s-]/' });
+          return validator.isAlphanumeric(string, ['en-IN'], { ignore: '/[ -]/' });
         },
-        message: 'Вы должны указать название на английском языке',
+        message: wrongNameInEnglish,
       },
     },
   },

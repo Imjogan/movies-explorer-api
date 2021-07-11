@@ -5,6 +5,7 @@ const AuthError = require('../errors/auth-err');
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
 const ConflictError = require('../errors/conflict-err');
+const { jwtSecretKey } = require('../utils/config');
 
 const {
   conflictEmailError,
@@ -18,16 +19,15 @@ module.exports.getUser = (req, res, next) => {
   (async () => {
     try {
       const user = await User.findById(req.user._id).orFail(
-        new Error('NotFound'),
+        new NotFoundError(userNotFoundError),
       );
       res.status(200).send(user);
     } catch (err) {
-      if (err.message === 'NotFound') {
-        next(new NotFoundError(userNotFoundError));
-      } else if (err.name === 'CastError') {
+      if (err.name === 'CastError') {
         next(new BadRequestError(incorrectUserDataError));
+      } else {
+        next(err);
       }
-      next(err);
     }
   })();
 };
@@ -51,8 +51,9 @@ module.exports.createUser = (req, res, next) => {
         next(new BadRequestError(incorrectUserDataError));
       } else if (err.name === 'MongoError' && err.code === 11000) {
         next(new ConflictError(conflictEmailError));
+      } else {
+        next(err);
       }
-      next(err);
     }
   })();
 };
@@ -68,15 +69,16 @@ module.exports.updateUser = (req, res, next) => {
           new: true,
           runValidators: true,
         },
-      ).orFail(new Error('NotFound'));
+      ).orFail(new NotFoundError(userNotFoundError));
       res.status(200).send(user);
     } catch (err) {
-      if (err.message === 'NotFound') {
-        next(new NotFoundError(userNotFoundError));
-      } else if (err.name === 'CastError') {
+      if (err.name === 'CastError') {
         next(new BadRequestError(incorrectProfileDataError));
+      } else if (err.name === 'MongoError' && err.code === 11000) {
+        next(new ConflictError(conflictEmailError));
+      } else {
+        next(err);
       }
-      next(err);
     }
   })();
 };
@@ -93,7 +95,7 @@ module.exports.login = (req, res, next) => {
       if (!matched) {
         throw new AuthError(wrongEmailPassword);
       }
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', {
+      const token = jwt.sign({ _id: user._id }, jwtSecretKey, {
         expiresIn: '7d',
       });
       res.status(200).send({ token });
