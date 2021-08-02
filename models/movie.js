@@ -68,7 +68,7 @@ const movieSchema = new mongoose.Schema(
       required: true,
       validate: {
         validator(string) {
-          return validator.isAlphanumeric(string, ['ru-RU'], { ignore: '/[ -"«»]/' });
+          return validator.isAlphanumeric(string, ['ru-RU'], { ignore: '/[ -«»,]/' });
         },
         message: wrongNameInRussian,
       },
@@ -78,7 +78,7 @@ const movieSchema = new mongoose.Schema(
       required: true,
       validate: {
         validator(string) {
-          return validator.isAlphanumeric(string, ['en-IN'], { ignore: '/[ -"«»]/' });
+          return validator.isAlphanumeric(string, ['en-IN'], { ignore: '/[ -«»,]/' });
         },
         message: wrongNameInEnglish,
       },
