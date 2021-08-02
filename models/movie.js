@@ -66,22 +66,10 @@ const movieSchema = new mongoose.Schema(
     nameRU: {
       type: String,
       required: true,
-      validate: {
-        validator(string) {
-          return validator.isAlphanumeric(string, ['ru-RU'], { ignore: '/[ -«»,:]/' });
-        },
-        message: wrongNameInRussian,
-      },
     },
     nameEN: {
       type: String,
       required: true,
-      validate: {
-        validator(string) {
-          return validator.isAlphanumeric(string, ['en-IN'], { ignore: '/[ -«»,:]/' });
-        },
-        message: wrongNameInEnglish,
-      },
     },
   },
   { versionKey: false },
