@@ -7,9 +7,7 @@ const { errors } = require('celebrate');
 const { options } = require('./utils/corsOptions');
 const { limiter } = require('./utils/limiter');
 const { mongoosePreset, dbAdress } = require('./utils/config');
-const { requestedResourceNotFoundError } = require('./utils/errors');
 const unexpectedError = require('./middlewares/unexpectedError');
-const NotFoundError = require('./errors/not-found-err');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 // порт из файла окружения
@@ -35,11 +33,6 @@ app.use(limiter);
 
 // общий файл роутов
 app.use('/', require('./routes/index'));
-
-// обрабатываем несуществующий роут
-app.use((req, res, next) => {
-  next(new NotFoundError(requestedResourceNotFoundError));
-});
 
 // подключаем логгер ошибок
 app.use(errorLogger);
