@@ -1,0 +1,16 @@
+module.exports.authorizationRequired = 'Необходима авторизация';
+module.exports.insufficientRights = 'Недостаточно прав для удаления чужих данных';
+module.exports.conflictEmailError = 'Пользователь с таким адресом уже зарегистрирован';
+module.exports.incorrectMovieDataError = 'Переданы некорректные данные карточки';
+module.exports.movieNotFoundError = 'Карточка не найдена';
+module.exports.userNotFoundError = 'Пользователь не найден';
+module.exports.incorrectUserDataError = 'Переданы некорректные данные пользователя';
+module.exports.incorrectProfileDataError = 'Переданы некорректные данные при обновлении профиля';
+module.exports.requestedResourceNotFoundError = 'Запрашиваемый ресурс не найден';
+module.exports.wrongEmailPassword = 'Неправильные почта или пароль';
+module.exports.serverEror = 'Произошла ошибка на стороне сервера';
+module.exports.wrongLink = 'Вы должны указать ссылку';
+module.exports.wrongEmail = 'Вы должны указать электронный адрес';
+module.exports.wrongNameInEnglish = 'Вы должны указать название на английском языке';
+module.exports.wrongNameInRussian = 'Вы должны указать название на русском языке';
+module.exports.wrongMailFormat = 'Неправильный формат почты';
